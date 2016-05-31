@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 //import Trainline from '../components/Trainline';
 //import CarsTimeToggle from '../components/CarsTimeToggle';
-//import DirectionFilters from '../components/DirectionFilters';
+import DirectionFilters from '../components/DirectionFilters';
 //import Schedule from '../components/Schedule';
 
 import {
@@ -16,8 +16,8 @@ export default class App extends Component {
   render() {
     return (
       <View>
-        <Text>Hello</Text>
         <Header />
+        <DirectionFilters />
       </View>
     );
   }

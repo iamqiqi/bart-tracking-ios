@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as bartActions from '../actions/bart';
+import { AppRegistry, View, Text, Picker, TouchableHighlight } from 'react-native';
 
 export default class DirectionFilters extends Component {
 
@@ -9,13 +10,11 @@ export default class DirectionFilters extends Component {
     const { currentStation, actions, stationListData, directionFilter } = this.props;
 
     return (
-      <div className="col-sm-8 bound-section">
-        <div className="btn-group btn-group-sm" role="group">
-          <button className="btn bound all" onClick={()=> { actions.setDirectionFilter("All") }}>All</button>
-          <button className="btn bound northbound" onClick={()=> { actions.setDirectionFilter("North") }}>Northbound</button>
-          <button className="btn bound southbound" onClick={()=> { actions.setDirectionFilter("South") }}>Southbound</button>
-        </div>
-      </div>
+      <View>
+        <TouchableHighlight onPress={() => {actions.setDirectionFilter("All")}}><Text>All</Text></TouchableHighlight>
+        <TouchableHighlight onPress={() => {actions.setDirectionFilter("North")}}><Text>Northbound</Text></TouchableHighlight>
+        <TouchableHighlight onPress={() => {actions.setDirectionFilter("South")}}><Text>Southbound</Text></TouchableHighlight>
+      </View>
     );
   }
 }

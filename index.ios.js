@@ -23,23 +23,45 @@ import { updateStationListData, setCurrentStation } from './actions/bart';
 
 const store = configureStore();
 
+let parseXmlString = require('react-native').NativeModules.RNMXml.parseString;
+
 getLocation((position) => {
   let defaultStation = getGPSStation(position);
   let action = setCurrentStation(defaultStation);
   store.dispatch(action);
 });
 
+const reformatJSON = function (raw) {
+
+  if (raw.content.length === 1 && typeof raw.content[0] == 'string') {
+    return raw.content[0];
+  } else {
+    let formatted = {};
+    raw.content.forEach((item) => {
+      let value = reformatJSON(item);
+      if (!formatted[item.tag]) {
+        formatted[item.tag] = value;
+      } else {
+        if (Array.isArray(formatted[item.tag])) {
+          formatted[item.tag].push(value);
+        } else {
+          formatted[item.tag] = [formatted[item.tag], value];
+        }
+      }
+    })
+    return formatted;
+  }
+};
+
 const refresh = function () {
   getBART((xml) => {
-    var parseString = require('xml2js').parseString;
-    parseString(xml, function(err, data) {
-      console.log(data);
-      let stationListData = processBART(data);
+    parseXmlString(xml, false, function(error, data) {
+      var formattedData = reformatJSON(data);
+      let stationListData = processBART(formattedData);
       let action = updateStationListData(stationListData);
       store.dispatch(action);
       setTimeout(refresh, 10000);
     });
-
   });
 };
 
@@ -48,8 +70,8 @@ refresh();
 class bartios extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Root store={store} />
+      <View style={ styles.container }>
+        <Root store={ store } />
       </View>
     );
   }
