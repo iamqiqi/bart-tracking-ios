@@ -21,7 +21,7 @@ export default class Header extends Component {
         </Text>
         <Picker
           selectedValue = { currentStation }
-          onValueChange = {() => { actions.setCurrentStation(selectedValue) }}
+          onValueChange = {(itemValue) => { actions.setCurrentStation(itemValue) }}
         >
           {Object.keys(stationListData).sort((a, b) => {
               if (stationListData[a].name < stationListData[b].name) {
