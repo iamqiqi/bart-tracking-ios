@@ -33,7 +33,7 @@ export default class Header extends Component {
               // a must be equal to b
               return 0;
           }).map((stationAbbr) => {
-            return <Picker.Item label={ stationListData[stationAbbr].name } value={ stationAbbr } />
+            return <Picker.Item key={stationAbbr} label={ stationListData[stationAbbr].name } value={ stationAbbr } />
           })}
         </Picker>
       </View>

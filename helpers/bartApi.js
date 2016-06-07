@@ -6,7 +6,6 @@ const BARTApi = 'MW9S-E7SL-26DU-VV8V';
 
 export function getBART(callback) {
   const bartRealTimeUri = 'https://api.bart.gov/api/etd.aspx?cmd=etd&orig=ALL&key=' + BARTApi;
-  console.log(bartRealTimeUri);
   fetch(bartRealTimeUri)
     .then((response) => response.text())
     .then((response) => {
@@ -109,8 +108,6 @@ export function getGPSStation(position) {
 //       details: details
 //     });
 //   });
-  
-//   console.log("returning:", scheduleArray);
 //   return scheduleArray;
 // }
 

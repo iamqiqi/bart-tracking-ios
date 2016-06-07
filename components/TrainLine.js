@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as bartActions from '../actions/bart';
+import { View, Text, StyleSheet, Dimensions} from 'react-native';
 
 export default class Trainline extends Component {
   lineClickHandler(line) {
@@ -14,7 +15,6 @@ export default class Trainline extends Component {
 
   render() {
     const { currentStation, actions, stationListData, carsTimeFilter, directionFilter, lineFilter } = this.props;
-
     let stationInfo = 'Loading...';
     let lines = {};
     if (stationListData[currentStation]) {
@@ -23,39 +23,105 @@ export default class Trainline extends Component {
     }
 
     return (
-      <div className="train-lines">
+      <View style={styles.container}>
         {Object.keys(lines).map((lineAbbr) => {
           return (
             (directionFilter === 'All' || directionFilter === lines[lineAbbr].direction) &&
             (lineFilter === 'All' || lineFilter === lines[lineAbbr].color) &&
-            <div key={lines[lineAbbr].abbr} className="train-line" color={lines[lineAbbr].color} direction={lines[lineAbbr].direction}
-              onClick={()=> this.lineClickHandler(lines[lineAbbr].color)}
-            >
-              <div className={`train-name ${lines[lineAbbr].color}`}>
-                { lines[lineAbbr].name }
-              </div>
-
-              { carsTimeFilter === 'SHOW_TIME' && <div className="train-times">
+            <View key={lineAbbr} style={ styles.trainLineBlock }>
+              <Text onClick={()=> this.lineClickHandler(lines[lineAbbr].color)} style={ styles[lines[lineAbbr].color] }>
+                  { lines[lineAbbr].name }
+              </Text>
+              { carsTimeFilter === 'TIME' && <View style={ styles.trainLineDetailsWrapper }>
                 {lines[lineAbbr].trains.map((train) => {
                   if (isNaN(train.time))
-                    return <div className="train-info train-time" key={train.id}>{ train.time }</div>;
+                    return <Text key={train.id} style={ styles.trainLineDetails }>{ train.time }</Text>;
                   else
-                    return <div className="train-info train-time" key={train.id}>{ train.time } min</div>;
+                    return <Text key={train.id} style={ styles.trainLineDetails }>{ train.time } min</Text>;
                 })}
-              </div> }
+              </View> }
 
-              { carsTimeFilter === 'SHOW_CARS' && <div className="train-cars">
+              { carsTimeFilter === 'CARS' && <View style={ styles.trainLineDetailsWrapper }>
                 {lines[lineAbbr].trains.map((train) => {
-                  return <div className="train-info train-car" key={train.id}>{ train.carCount } cars</div>;
+                  return <Text key={train.id} style={ styles.trainLineDetails }>{ train.carCount } cars</Text>;
                 })}
-              </div> }
-            </div>
+              </View> }
+            </View>
           )
         })}
-      </div>
+      </View>
     );
   }
 }
+
+const lineName = {
+  padding: 10,
+  fontSize: 25,
+  fontWeight: 'bold',
+  color: 'white',
+  alignSelf: 'stretch',
+  textAlign: 'center',
+};
+
+var width = Dimensions.get('window').width;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'stretch',
+  },
+
+  trainLineBlock: {
+    alignSelf: 'stretch',
+  },
+
+  trainLineDetails: {
+    width: width * .33,
+    padding: 15,
+    fontSize: 20,
+    alignSelf: 'auto',
+    textAlign: 'center',
+  },
+
+  trainLineDetailsWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignSelf: 'stretch',
+  },
+
+  BLUE: {
+    ...lineName,
+    backgroundColor: '#1575D5'
+  },
+
+  YELLOW: {
+    ...lineName,
+    backgroundColor: '#E6E600'
+  },
+
+  RED: {
+    ...lineName,
+    backgroundColor: '#E93939'
+  },
+
+  GREEN: {
+    ...lineName,
+    backgroundColor: '#51BF16'
+  },
+
+  ORANGE: {
+    ...lineName,
+    backgroundColor: '#F7B016'
+  },
+
+  GRAY: {
+    ...lineName,
+    backgroundColor: 'gray'
+  },
+});
 
 function select(state) {
   return {

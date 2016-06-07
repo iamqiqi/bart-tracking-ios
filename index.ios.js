@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import styles from './styles/Styles';
 import Root from './containers/Root';
 import configureStore from './store/configureStore';
 import {
@@ -76,5 +75,13 @@ class bartios extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 AppRegistry.registerComponent('bartios', () => bartios);
